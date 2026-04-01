@@ -11,7 +11,15 @@ final class Starship
         private(set) string $name,
         private(set) string $class,
         private(set) string $captain,
-        private(set) string $status,
+        private(set) StarshipStatus $status,
     ) {
+    }
+
+    public string $statusName {
+        get => $this->status->value;
+    }
+
+    public string $statusImage {
+        get => $this->status->statusImage();
     }
 }
