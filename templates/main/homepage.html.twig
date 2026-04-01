@@ -6,14 +6,8 @@
     <h1>StarShop: your monopoly-busting option for Starship parts!</h1>
 
     <div>
-        Browse through {{ numberOfStarships }} starships!
+        Browse through {{ ships|length }} starships!
     </div>
-
-    {% if numberOfStarships > 400 %}
-        <p>
-            That's a shipload of ships!
-        </p>
-    {% endif %}
 
     <div>
         <h2>My Ship</h2>
@@ -21,7 +15,11 @@
         <table>
             <tr>
                 <th>Name</th>
-                <td>{{ myShip.name }}</td>
+                <td>
+                    <a href="{{ path('starships.show', {id: myShip.id}) }}">
+                        {{ myShip.name }}
+                    </a>
+                </td>
             </tr>
             <tr>
                 <th>Class</th>
