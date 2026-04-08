@@ -25,7 +25,8 @@ final class StarshipRepository
                 'USS LeafyCruiser (NCC-0001)',
                 'Garden',
                 'Jean-Luc Pickles',
-                StarshipStatus::IN_PROGRESS
+                StarshipStatus::IN_PROGRESS,
+                new \DateTimeImmutable('-1 day'),
             ),
             new Starship(
                 2,
@@ -33,6 +34,7 @@ final class StarshipRepository
                 'Latte',
                 'James T. Quick!',
                 StarshipStatus::COMPLETED,
+                new \DateTimeImmutable('-1 week'),
             ),
             new Starship(
                 3,
@@ -40,6 +42,7 @@ final class StarshipRepository
                 'Delta Tourist',
                 'Kathryn Journeyway',
                 StarshipStatus::WAITING,
+                new \DateTimeImmutable('-1 month'),
             ),
         ];
     }

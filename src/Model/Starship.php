@@ -12,6 +12,7 @@ final class Starship
         private(set) string $class,
         private(set) string $captain,
         private(set) StarshipStatus $status,
+        private(set) \DateTimeImmutable $arrivedAt,
     ) {
     }
 
