@@ -18,13 +18,13 @@ final class MainController extends AbstractController
     public function homepage(
         StarshipRepository $starshipRepository,
         HttpClientInterface $client,
-        CacheInterface $cache,
+        CacheInterface $issLocationPool,
     ): Response {
         $ships = $starshipRepository->findAll();
         $myShip = $ships[array_rand($ships)];
 
-        $issData = $cache->get('iss_location_data', function (ItemInterface $item) use ($client) {
-            $item->expiresAfter(15);
+        $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client) {
+            $item->expiresAfter(20);
             $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
 
             return $response->toArray();
