@@ -13,14 +13,11 @@ final class MainController extends AbstractController
 {
     #[Route('/', name: 'main')]
     public function homepage(
-        StarshipRepository $starshipRepository,
+        StarshipRepository $repository,
     ): Response {
-        $ships = $starshipRepository->findAll();
-        $myShip = $ships[array_rand($ships)];
-
         return $this->render('main/homepage.html.twig', [
-            'ships' => $ships,
-            'myShip' => $myShip,
+            'ships' => $repository->findIncomplete(),
+            'myShip' => $repository->findMyShip(),
         ]);
     }
 }

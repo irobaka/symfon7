@@ -1,62 +1,61 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Repository;
 
-use App\Model\Starship;
-use App\Model\StarshipStatus;
-use Psr\Log\LoggerInterface;
+use App\Entity\Starship;
+use App\Entity\StarshipStatus;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-final class StarshipRepository
+/**
+ * @extends ServiceEntityRepository<Starship>
+ */
+class StarshipRepository extends ServiceEntityRepository
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-    ) {
-    }
-
-    public function findAll(): array
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->logger->info('Starships collection retrieved');
-
-        return [
-            new Starship(
-                1,
-                'USS LeafyCruiser (NCC-0001)',
-                'Garden',
-                'Jean-Luc Pickles',
-                StarshipStatus::IN_PROGRESS,
-                new \DateTimeImmutable('-1 day'),
-            ),
-            new Starship(
-                2,
-                'USS Espresso (NCC-1234-C)',
-                'Latte',
-                'James T. Quick!',
-                StarshipStatus::COMPLETED,
-                new \DateTimeImmutable('-1 week'),
-            ),
-            new Starship(
-                3,
-                'USS Wanderlust (NCC-2024-W)',
-                'Delta Tourist',
-                'Kathryn Journeyway',
-                StarshipStatus::WAITING,
-                new \DateTimeImmutable('-1 month'),
-            ),
-        ];
+        parent::__construct($registry, Starship::class);
     }
 
-    public function find(int $id): ?Starship
+    /**
+     * @return Starship[]
+     */
+    public function findIncomplete(): array
     {
-        foreach ($this->findAll() as $starship) {
-            if ($starship->id === $id) {
-                $this->logger->info('Starship retrieved', ['id' => $id]);
-
-                return $starship;
-            }
-        }
-
-        return null;
+        return $this->createQueryBuilder('s')
+            ->where('s.status != :status')
+            ->setParameter('status', StarshipStatus::COMPLETED)
+            ->getQuery()
+            ->getResult();
     }
+
+    public function findMyShip(): Starship
+    {
+        return $this->findAll()[0];
+    }
+
+    //    /**
+    //     * @return Starship[] Returns an array of Starship objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('s.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Starship
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

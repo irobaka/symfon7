@@ -7,6 +7,9 @@
         "php": ">=8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "^3.2",
+        "doctrine/doctrine-migrations-bundle": "^4.0",
+        "doctrine/orm": "^3.6",
         "knplabs/knp-time-bundle": "^2.5",
         "php-cs-fixer/shim": "^3.94",
         "phpdocumentor/reflection-docblock": "^6.0",
@@ -81,13 +84,16 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "8.0.*"
+            "require": "8.0.*",
+            "docker": true
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.3",
         "symfony/debug-bundle": "8.0.*",
         "symfony/maker-bundle": "^1.67",
         "symfony/stopwatch": "8.0.*",
-        "symfony/web-profiler-bundle": "8.0.*"
+        "symfony/web-profiler-bundle": "8.0.*",
+        "zenstruck/foundry": "^2.9"
     }
 }

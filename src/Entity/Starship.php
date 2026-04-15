@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Entity;
+
+use App\Entity\StarshipStatus;
+use App\Repository\StarshipRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: StarshipRepository::class)]
+class Starship
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $captain = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $class = null;
+
+    #[ORM\Column(enumType: StarshipStatus::class)]
+    private ?StarshipStatus $status = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $arrived_at = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCaptain(): ?string
+    {
+        return $this->captain;
+    }
+
+    public function setCaptain(string $captain): static
+    {
+        $this->captain = $captain;
+
+        return $this;
+    }
+
+    public function getClass(): ?string
+    {
+        return $this->class;
+    }
+
+    public function setClass(string $class): static
+    {
+        $this->class = $class;
+
+        return $this;
+    }
+
+    public function getStatus(): ?StarshipStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(StarshipStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getArrivedAt(): ?\DateTimeImmutable
+    {
+        return $this->arrived_at;
+    }
+
+    public function setArrivedAt(\DateTimeImmutable $arrived_at): static
+    {
+        $this->arrived_at = $arrived_at;
+
+        return $this;
+    }
+
+    public string $statusName {
+        get => $this->status->value;
+    }
+
+    public string $statusImage {
+        get => $this->status->statusImage();
+    }
+}

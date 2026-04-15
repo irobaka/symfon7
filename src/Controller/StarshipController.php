@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Starship;
 use App\Repository\StarshipRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ final class StarshipController extends AbstractController
     #[Route('/{id<\d+>}', name: 'show')]
     public function show(int $id, StarshipRepository $repository): Response
     {
-        $starship = $repository->find($id);
+        $starship = $repository->find(Starship::class, $id);
 
         if (!$starship) {
             throw $this->createNotFoundException('Starship not found');
