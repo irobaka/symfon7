@@ -27,7 +27,7 @@ class Starship
     private ?StarshipStatus $status = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $arrived_at = null;
+    private ?\DateTimeImmutable $arrivedAt = null;
 
     public function getId(): ?int
     {
@@ -84,12 +84,12 @@ class Starship
 
     public function getArrivedAt(): ?\DateTimeImmutable
     {
-        return $this->arrived_at;
+        return $this->arrivedAt;
     }
 
-    public function setArrivedAt(\DateTimeImmutable $arrived_at): static
+    public function setArrivedAt(\DateTimeImmutable $arrivedAt): static
     {
-        $this->arrived_at = $arrived_at;
+        $this->arrivedAt = $arrivedAt;
 
         return $this;
     }

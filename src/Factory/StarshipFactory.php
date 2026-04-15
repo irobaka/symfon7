@@ -114,7 +114,7 @@ final class StarshipFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'arrived_at' => \DateTimeImmutable::createFromMutable(self::faker()->dateTimeBetween('-1 year', 'now')),
+            'arrivedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTimeBetween('-1 year', 'now')),
             'captain' => self::faker()->randomElement(self::CAPTAINS),
             'class' => self::faker()->randomElement(self::CLASSES),
             'name' => self::faker()->randomElement(self::SHIP_NAMES),
