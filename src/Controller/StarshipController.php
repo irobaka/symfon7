@@ -5,23 +5,20 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Starship;
-use App\Repository\StarshipRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/starship', name: 'starships.')]
+#[Route('/starships', name: 'starships.')]
 final class StarshipController extends AbstractController
 {
-    #[Route('/{id<\d+>}', name: 'show')]
-    public function show(int $id, StarshipRepository $repository): Response
+    #[Route('/{slug}', name: 'show')]
+    public function show(
+        #[MapEntity(mapping: ['slug' => 'slug'])]
+        Starship $starship
+    ): Response
     {
-        $starship = $repository->find(Starship::class, $id);
-
-        if (!$starship) {
-            throw $this->createNotFoundException('Starship not found');
-        }
-
         return $this->render('starship/show.html.twig', [
             'ship' => $starship,
         ]);

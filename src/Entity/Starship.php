@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Entity\StarshipStatus;
 use App\Repository\StarshipRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
+use Gedmo\Mapping\Annotation\Timestampable;
 
 #[ORM\Entity(repositoryClass: StarshipRepository::class)]
 class Starship
@@ -17,6 +18,10 @@ class Starship
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255, unique: false)]
+    #[Slug(fields: ['name'])]
+    private ?string $slug = null;
+
     #[ORM\Column(length: 255)]
     private ?string $captain = null;
 
@@ -28,6 +33,14 @@ class Starship
 
     #[ORM\Column]
     private ?\DateTimeImmutable $arrivedAt = null;
+
+    #[ORM\Column]
+    #[Timestampable(on: 'create')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    #[Timestampable(on: 'update')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -42,6 +55,18 @@ class Starship
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
@@ -94,11 +119,43 @@ class Starship
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     public string $statusName {
         get => $this->status->value;
     }
 
     public string $statusImage {
         get => $this->status->statusImage();
+    }
+
+    public function checkIn(?\DateTimeImmutable $arrivedAt = null): static
+    {
+        $this->arrivedAt = $arrivedAt ?? new \DateTimeImmutable();
+        $this->status = StarshipStatus::WAITING;
+
+        return $this;
     }
 }

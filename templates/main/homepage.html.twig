@@ -17,7 +17,7 @@
 
             <div class="space-y-5">
                 {% for ship in ships %}
-                    {# @var ship \App\Model\Starship #}
+                    {# @var ship \App\Entity\Starship #}
                     <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">
                         <div class="flex justify-center min-[1174px]:justify-start">
                             <img class="h-[83px] w-[84px]" src="{{ asset(ship.statusImage) }}" alt="Status: {{ ship.statusName }}">
@@ -29,7 +29,7 @@
                                 <h4 class="text-[22px] pt-1 font-semibold">
                                     <a
                                         class="hover:text-slate-200"
-                                        href="{{ path('starships.show', {id: ship.id}) }}"
+                                        href="{{ path('starships.show', {slug: ship.slug}) }}"
                                     >{{ ship.name }}</a>
                                 </h4>
                                 <div>Arrived at: {{ ship.arrivedAt|ago }}</div>

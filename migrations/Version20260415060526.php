@@ -14,7 +14,7 @@ final class Version20260415060526 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Add starship table';
     }
 
     public function up(Schema $schema): void
