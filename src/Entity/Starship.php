@@ -3,13 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\StarshipRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
-use Gedmo\Mapping\Annotation\Timestampable;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: StarshipRepository::class)]
 class Starship
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,13 +38,16 @@ class Starship
     #[ORM\Column]
     private ?\DateTimeImmutable $arrivedAt = null;
 
-    #[ORM\Column]
-    #[Timestampable(on: 'create')]
-    private ?\DateTimeImmutable $createdAt = null;
+    /**
+     * @var Collection<int, StarshipPart>
+     */
+    #[ORM\OneToMany(targetEntity: StarshipPart::class, mappedBy: 'starship')]
+    private Collection $starshipParts;
 
-    #[ORM\Column]
-    #[Timestampable(on: 'update')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    public function __construct()
+    {
+        $this->starshipParts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,23 +126,6 @@ class Starship
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
@@ -143,18 +133,50 @@ class Starship
         return $this;
     }
 
-    public string $statusName {
-        get => $this->status->value;
+    public function getStatusName(): string
+    {
+        return $this->status->value;
     }
 
-    public string $statusImage {
-        get => $this->status->statusImage();
+    public function getStatusImage(): string
+    {
+        return $this->status->statusImage();
     }
 
     public function checkIn(?\DateTimeImmutable $arrivedAt = null): static
     {
         $this->arrivedAt = $arrivedAt ?? new \DateTimeImmutable();
         $this->status = StarshipStatus::WAITING;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StarshipPart>
+     */
+    public function getStarshipParts(): Collection
+    {
+        return $this->starshipParts;
+    }
+
+    public function addStarshipPart(StarshipPart $starshipPart): static
+    {
+        if (!$this->starshipParts->contains($starshipPart)) {
+            $this->starshipParts->add($starshipPart);
+            $starshipPart->setStarship($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStarshipPart(StarshipPart $starshipPart): static
+    {
+        if ($this->starshipParts->removeElement($starshipPart)) {
+            // set the owning side to null (unless already changed)
+            if ($starshipPart->getStarship() === $this) {
+                $starshipPart->setStarship(null);
+            }
+        }
 
         return $this;
     }
