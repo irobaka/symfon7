@@ -6,6 +6,7 @@ use App\Repository\StarshipRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -41,7 +42,8 @@ class Starship
     /**
      * @var Collection<int, StarshipPart>
      */
-    #[ORM\OneToMany(targetEntity: StarshipPart::class, mappedBy: 'starship')]
+    #[ORM\OneToMany(targetEntity: StarshipPart::class, mappedBy: 'starship', fetch: 'EXTRA_LAZY', orphanRemoval: true)]
+    #[OrderBy(['name' => 'ASC'])]
     private Collection $starshipParts;
 
     public function __construct()
